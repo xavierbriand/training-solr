@@ -249,3 +249,11 @@ code {
 .center {
     text-align: center;
 }
+
+dt {
+    font-weight: bold;
+}
+
+dd {
+    margin-left: 1em;
+}

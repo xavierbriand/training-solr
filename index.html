@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="fr">
+
+    <head>
+        <meta charset="utf-8">
+        <title>Solr overview</title>
+        <link href='http://fonts.googleapis.com/css?family=Crimson+Text:regular,600,bold' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="css/reset.css">
+        <link rel="stylesheet" href="css/main.css">
+    </head>
+
+    <body>
+
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div id="main">
+
+            <section>
+                <h1>Solr</h1>
+                <h3 class="inverted">Overview</h3>
+                <p class="center"><img src="image/solr.png" /></p>
+            </section>
+
+            <section>
+                <h2>Wath is it?</h2>
+                <dl>
+                    <dt>Solr</dt>
+                    <dd>Java webapp, Open source (Apache), REST API on top of Lucene</dd>
+                    <dt>Lucene</dt>
+                    <dd>Java (.net, perl, ...) open source search library</dd>
+                </dl>
+                <br />
+                <br />
+                <h2>Used by</h2>
+                <ul>
+                    <li>Cisco, Twitter, HP, Ford, eBay, shopzilla, ...</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Vocabulary</h2>
+                <ul>
+                    <li>Document</li>
+                    <li>Field (indexed, stored)</li>
+                    <li>Index</li>
+                    <li>Indexing</li>
+                    <li>Query (phrase, wildcard, fuzzy, range, facet, ...)</li>
+                    <li>Relevance</li>
+                    <li>Precision, Recall</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Query</h2>
+                <p class="code">
+                    http://localhost:8983/solr/select?q=mike&fq=category:music&start=10&rows=10
+                    &fl=title,category,body&indent=on
+                    &sort=score+desc&debugQuert=true
+                </p>
+                <p class="code">
+                    *:*,  title:foo*, foo?ar, "Foo bar"
+                </p>
+
+                <p class="code" style="font-size:0.6em">
+                    (foo AND bar) OR "foo bar"^10 NOT foobar OR foobar~^0.5
+                </p>
+
+                <p class="code">
+                    price:[10 TO 50], date:NOW\DAY-5DAY
+                </p>
+            </section>
+
+            <section>
+                <h2>Query Parser</h2>
+                <ul>
+                    <li>Lucene</li>
+                    <li>DisMax (+, -, ps, mm, bq, bf)</li>
+                    <li>EDisMax</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Architecture</h2>
+                <p class="code">solrconfig.xml</p>
+                <ul>
+                    <li><code>RequestHandler</code>
+                    <ul>
+                        <li>process, multiple</li>
+                        <li>SearchHandler, ReplicationHandler, BinaryUpdateRequestHandler, DIH, ...</li>
+                    </ul>
+                    </li>
+                    <li><code>ResponseWriter</code>
+                        <ul>
+                            <li><strong>wt</strong>, xml, json, php, ruby, ...</li>
+                            <li><code>VelocityReponseWriter</code> (Solaritas)</li>
+                        </ul>
+                    </li>
+                </p>
+            </section>
+            <section>
+                <h2>Search Component</h2>
+                <ul>
+                    <li>QueryComponent</li>
+                    <li>FacetComponent</li>
+                    <li>HighLikeComponent</li>
+                    <li>MoreLikeThisComponent</li>
+                    <li>SpellCheckerComponent, N-Gram</li>
+                    <li>TermsComponent</li>
+                    <li>ElevationComponent</li>
+                    <li>ClusteringComponent</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Indexing</h2>
+                <ul>
+                    <li>xml</li>
+                    <li>schema (text, string, numeric, ...)</li>
+                    <li>Workflow
+                        <ul>
+                            <li>Action : UPDATE, DELETE (RAM)</li>
+                            <li>Analyse (tokenizer, filter)</li>
+                            <li>Commit (inverted index, segment, flag)</li>
+                            <li>IndexSearcher (warmup)</li>
+                            <li>Optimize (merge, partial)</li>
+                            <li>Cache (filter, field, results, document, 
+                        </ul>
+                    </li>
+                </uL>
+            </section>
+
+            <section>
+                <h2>Analysis</h2>
+                <p class="code">
+                    &lt;fieldType name="..." class="solr.TextField"&gt; &lt;analyzer type="index"&gt; &lt;analyzer type="query"&gt;
+                </p>
+                <ul>
+                    <li>character filters chain</li>
+                    <li>tokeniser (lexical unit)
+                        <ul>
+                            <li>WhitespaceTokenizer, PatternTokenizer</li>
+                            <li>StandardTokenizer, ClassicTokenizer</li>
+                            <li>KeywordTokenizer</li>
+                        </ul>
+                    </li>
+                    <li>token filters chain (change, add, delete)
+                        <ul>
+                            <li>change case, remove ponctuation</li>
+                            <li>stop word, synonyms</li>
+                            <li>stemming (keyword, porter, ...)</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <section>
+                    <h2>DIH (Data Import Handler)</h2>
+                    <ul>
+                        <li>Data sources (file, url, JDBC)</li>
+                        <li>Processors (Sql, CachedSql, Xpath, FileList, PlainText)</li>
+                        <li>Transformers (Regex, Number, Daten HTML, script)</li>
+                    </ul>
+                    <br />
+                    <ul>
+                        <li>full or delta imliort</li>
+                        <li>admin console</li>
+                    </ul>
+                </section>
+            </section>
+
+            <section>
+                <h2>Scoring</h2>
+                <ul>
+                    <li>Terms</li>
+                    <li>Vectors</li>
+                    <li>Vector space model</li>
+                    <li>TF</li>
+                    <li>IDF</li>
+                    <li>Coord</li>
+                    <li>Length normalization</li>
+                    <li>Boosting (index time, query time, per field document)</li>
+                </ul>
+                <p class="code">
+                    score(q,d) = coord(q,d) * queryNorm(q)
+                    <br />* SUM( tf(t in d) * idf(t)^2 * t.getBoost() * norm(t,d) )
+                </p>
+            </section>
+
+            <section>
+                <h2>Relevance</h2>
+                <br />
+                <br />
+                <br />
+                <h1 class="inverted">That's a good questions</h1>
+            </section>
+
+            <section>
+                <h2>Function queries</h2>
+                <ul>
+                    <li><code>&bf=sub(retailPriceFiled, wholesalePriceField)</code> added</li>
+                    <li><code>&boost=recip(ms(NOW, updatedAT), 3.1e-11, 1, 1)</code> multiplied</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Administration</h2>
+                <br />
+                <br />
+                <h2 class="inverted">a picture is worth a thousand words</h2>
+                <ul>
+                    <li>JVM</li>
+                    <li>replication</li>
+                    <li>multi-core</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>This is the end</h2>
+                <br />
+                <br />
+                <br />
+                <h1 class="inverted">Questions?</h1>
+            </section>
+        </div>
+
+        <script src="js/slideshow.js"></script>
+    </body>
+</html>
